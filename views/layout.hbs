@@ -34,6 +34,9 @@
     <script src="../js/chartist.min.js"></script>
     <!--  Dynamic Elements plugin -->
     <script src="../js/arrive.min.js"></script>
+    <script src="../js/jquery.slimscroll.min.js"></script>
+    <script src="../js/sweetalert.min.js"></script>
+    <script src="https://unpkg.com/scrollreveal/dist/scrollreveal.min.js"></script>
     <!--  PerfectScrollbar Library -->
     <script src="../js/perfect-scrollbar.jquery.min.js"></script>
     <!--  Notifications Plugin    -->
@@ -51,19 +54,17 @@
     <!-- Material Dashboard DEMO methods, don't include it in your project! -->
     <script src="../js/demo.js"></script>
     <script src="../js/custom.js"></script>
-    <script src="../js/jquery.slimscroll.min.js"></script>
-    <script src="../js/sweetalert.min.js"></script>
-    <script src="https://unpkg.com/scrollreveal/dist/scrollreveal.min.js"></script>
+    
     <script>
         const ipfs = new IPFS({ host: 'ipfs.infura.io', port: 5001, protocol: 'https' });
         if(window.location.pathname == '/send'){
             generateDocs();
         }
 
+
         // console.log(window.location.pathname);
         if(window.location.pathname == '/' || window.location.pathname == '/index' ){
-            web3.eth.getBalance(web3.eth.defaultAccount,function(e,d){$("#balance").html(d.c[0]/10000)});
-            getTransactions();
+
             window.sr = ScrollReveal({
                 reset: true,
                 origin: 'top',
@@ -71,20 +72,9 @@
              });
             sr.reveal('.foo');
             sr.reveal('.bar');
-
-            $('.chatbot-hover-button').on('click', function() {
-                $('.chatbot-dialog').toggleClass('hidden animated bounceInUp');
-                $('.chatbot-hover-button').addClass('animated rubberBand');
-                $('.chatbot-hover-button').toggleClass('bg-green bg-red');
-                if($('.chatbot-hover-button').hasClass('bg-red'))
-
-                    $('.chatbot-hover-button i').html('close');
-                    else
-                        $('.chatbot-hover-button i').html('chat');
-            });
             $(window).scroll(function(){
-
-                if(window.scrollY > 500){
+                console.log(window.scrollY);
+                if(window.scrollY > 200){
                 $('#sidebar').removeClass("hidden");
                 if($('#sidebar').hasClass("bounceOutLeft")){
                         $('#sidebar').removeClass("bounceOutLeft");
@@ -98,6 +88,21 @@
                 }
 
             });
+            web3.eth.getBalance(web3.eth.defaultAccount,function(e,d){$("#balance").html(d.c[0]/10000)});
+            getTransactions();
+            
+
+            $('.chatbot-hover-button').on('click', function() {
+                $('.chatbot-dialog').toggleClass('hidden animated bounceInUp');
+                $('.chatbot-hover-button').addClass('animated rubberBand');
+                $('.chatbot-hover-button').toggleClass('bg-green bg-red');
+                if($('.chatbot-hover-button').hasClass('bg-red'))
+
+                    $('.chatbot-hover-button i').html('close');
+                    else
+                        $('.chatbot-hover-button i').html('chat');
+            });
+            
 
         }
         if(window.location.pathname == "/sendmoney"){
@@ -116,29 +121,7 @@
 
         }
     </script>
-    <script>
-	$(function () { // wait for document ready
-		// init
-		var controller = new ScrollMagic.Controller({
-			globalSceneOptions: {
-				triggerHook: 'onLeave'
-			}
-		});
-
-		// get all slides
-		var slides = document.querySelectorAll("section.pnel");
-
-		// create scene for every slide
-		for (var i=0; i<slides.length; i++) {
-			new ScrollMagic.Scene({
-					triggerElement: slides[i]
-				})
-				.setPin(slides[i])
-				.addIndicators() // add indicators (requires plugin)
-				.addTo(controller);
-		}
-	});
-    </script>
+    
 
 
 
