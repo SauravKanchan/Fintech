@@ -3,8 +3,8 @@ contract CryptoDoc {
   address[] public documents;
 
   modifier onlyManager() {
-    // require(msg.sender == manager);
-    require(msg.sender.balance/1000000000000000000 >= 20);
+    require(msg.sender == manager);
+    // require(msg.sender.balance/1000000000000000000 >= 20);
     _;
   }
 

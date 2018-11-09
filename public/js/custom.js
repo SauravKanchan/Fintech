@@ -123,6 +123,7 @@ function addRow() {
 }
 
 function submit(id,ind) {
+    console.log(id,ind)
     var index = -1;
     var data = {};
     var doc = "";
@@ -197,12 +198,14 @@ publicKey2 = "19095de907dde35066bfb780f520cc5a026463f6dc0e8acde90bebf6691d5bf0ed
 
 
 function createData() {
-    var transactions = localStorage.getItem("transactions").split(",")
-    var datetime = localStorage.getItem("datetime").split(",")
     try{
         var titles = localStorage.getItem("titles").split(",");
+        var transactions = localStorage.getItem("transactions").split(",")
+        var datetime = localStorage.getItem("datetime").split(",")
     }catch (e){
         var titles = [];
+        var transactions = [];
+        var datetime = [];
     }
     result = {}
     let rows = $('#container-rows').children();
@@ -301,7 +304,7 @@ function sendIPFS(){
     }
     ipfs.addJSON(result2, (err, r) => {
         console.log(r);
-        
+
         $('#hashgoeshere').val(r);
         $('#hashcard').removeClass("hidden");
         $('#hashcard').addClass("animated bounceInLeft");
@@ -317,7 +320,7 @@ function getFromHash(){
             <tr>
                                     <td>${key}</td>
                                     <td>${d[key]}</td>
-                                
+
                                 </tr>
             `;
             $('#dataholder').removeClass("hidden");
@@ -349,7 +352,7 @@ function sendMoney(){
             type:"success"
         }, function(){ window.location = ''});
     });
-    
+
 }
 
 function getHistory(){
