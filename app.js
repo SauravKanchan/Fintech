@@ -10,6 +10,7 @@ var users = require('./routes/users');
 var verify = require('./routes/verify');
 var create = require('./routes/create');
 var send = require('./routes/send');
+var admin = require('./routes/admin');
 var data = require('./routes/data');
 var sendmoney = require('./routes/sendmoney');
 var Preferences = require("preferences");
@@ -36,6 +37,7 @@ app.use('/', index);
 app.use('/verify', verify);
 app.use('/create', create);
 app.use('/send', send);
+app.use('/admin',admin);
 app.use('/data',data);
 app.use('/sendmoney',sendmoney);
 
