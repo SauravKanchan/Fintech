@@ -9,7 +9,7 @@ function verify(type='success'){
         function(){
             swal({
                 title: "Fetching public key",
-                text: "Fetching public key from sender..",
+                text: "Fetching public key from 2sender..",
                 imageUrl: '../assets/img/loading.gif',
                 timer: 3000,
                 showConfirmButton: false,
@@ -53,7 +53,7 @@ function verify(type='success'){
 
 function addRow(){
     var test = $('#sample-row');
-    
+
     test = test.html();
 
     $('#container-rows').append(test);

@@ -138,6 +138,7 @@ function submit(id,ind) {
     Crypto.documents(ind, function(e,s){
         DocumentContract.at(s).encrypted_data(function(e, doc) {
 
+
             EthCrypto.decryptWithPrivateKey(privateKey, JSON.parse(doc)).then(d => (EthCrypto.encryptWithPublicKey(address, d).then(
                 (data) => {send({ 'address': address, 'type': type, 'data': data })
                     swal({
@@ -146,7 +147,21 @@ function submit(id,ind) {
                         type: "success",
                     });
                 }
-            )));
+            ))).catch((e) => {
+
+
+                EthCrypto.decryptWithPrivateKey(privateKey2, JSON.parse(doc)).then(d => (EthCrypto.encryptWithPublicKey(address, d).then(
+                    (data) => {send({ 'address': address, 'type': type, 'data': data })
+                        swal({
+                            title: "Data Sent!",
+                            text: "Successfully sent document...",
+                            type: "success",
+                        });
+                    }
+                )));
+            });
+
+
 
         });
     });
@@ -189,14 +204,14 @@ first_acc_path = "m/44'/60'/0'/0/0";
 instance = hdkey.fromMasterSeed(seed);
 firstAccount = instance.derivePath(first_acc_path);
 
-// privateKey = firstAccount.getWallet().getPrivateKeyString();
-// publicKey = EthCrypto.publicKeyByPrivateKey(privateKey);
+privateKey = firstAccount.getWallet().getPrivateKeyString();
+publicKey = EthCrypto.publicKeyByPrivateKey(privateKey);
 
 
 address = EthCrypto.addressByPublicKey(publicKey);
 
-privateKey = "0x1068e1d200d2bd3140445afec1ac7829f0012b87ff6c646f6b01023c95db13c8";
-publicKey = "19095de907dde35066bfb780f520cc5a026463f6dc0e8acde90bebf6691d5bf0ed503338414631fc5b6ccc8cad7487ad2c76ee1813a370ae14803912f43d8fd7";
+privateKey2 = "0x1068e1d200d2bd3140445afec1ac7829f0012b87ff6c646f6b01023c95db13c8";
+publicKey2 = "19095de907dde35066bfb780f520cc5a026463f6dc0e8acde90bebf6691d5bf0ed503338414631fc5b6ccc8cad7487ad2c76ee1813a370ae14803912f43d8fd7";
 
 
 function createData() {
@@ -268,32 +283,32 @@ function generateDocs(){
     color = ['red', 'green', 'purple', 'orange','blue']
     for(i=0; i<titles.length; i++){
 
-            var html = `<div class="col-md-4">
-                <div class="card">
-                <div class="card-header" data-background-color="${color[i%5]}">
-                <h4 class="title">${titles[i]}</h4>
-                <p class="category"></p>
-                </div>
-                <div class="card-content">
-                <div id="container-rows">
-                <div id="sample-row">
-                <div class="row">
-                <div class="col-md-12">
-                <div class="form-group label-floating">
-                <label class="control-label">Public key to send</label>
-                <input id="${titles[i]}" type="text" class="form-control">
-                </div>
-                </div>
-                </div>
-                </div>
-                </div>
-                <button type="submit" onclick="submit('${titles[i]}',${i});" class="btn btn-primary pull-right">Send Document</button>
-                <div class="clearfix"></div>
-                </div>
-                </div>
-                </div>`;
-                $('#cardholder').append(html);
-        }
+        var html = `<div class="col-md-4">
+        <div class="card">
+        <div class="card-header" data-background-color="${color[i%5]}">
+        <h4 class="title">${titles[i]}</h4>
+        <p class="category"></p>
+        </div>
+        <div class="card-content">
+        <div id="container-rows">
+        <div id="sample-row">
+        <div class="row">
+        <div class="col-md-12">
+        <div class="form-group label-floating">
+        <label class="control-label">Public key to send</label>
+        <input id="${titles[i]}" type="text" class="form-control">
+        </div>
+        </div>
+        </div>
+        </div>
+        </div>
+        <button type="submit" onclick="submit('${titles[i]}',${i});" class="btn btn-primary pull-right">Send Document</button>
+        <div class="clearfix"></div>
+        </div>
+        </div>
+        </div>`;
+        $('#cardholder').append(html);
+    }
 }
 
 function sendIPFS(){
@@ -310,7 +325,7 @@ function sendIPFS(){
         $('#hashgoeshere').val(r);
         $('#hashcard').removeClass("hidden");
         $('#hashcard').addClass("animated bounceInLeft");
-      });
+    });
 }
 
 function getFromHash(){
@@ -320,10 +335,10 @@ function getFromHash(){
         for(key in d){
             html4 = `
             <tr>
-                                    <td>${key}</td>
-                                    <td>${d[key]}</td>
+            <td>${key}</td>
+            <td>${d[key]}</td>
 
-                                </tr>
+            </tr>
             `;
             $('#dataholder').removeClass("hidden");
             $('#dataholder').addClass("animated bounceInRight");
