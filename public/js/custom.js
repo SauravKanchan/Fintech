@@ -229,7 +229,7 @@ function createData() {
                         {
                             swal({
                                 title: "Error",
-                                text: "Insufficent balance...",
+                                text: "error",
                                 type: "error",
                             },
                                 );}else{
