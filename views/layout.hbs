@@ -63,6 +63,10 @@
             generateDocs();
         }
 
+        if(window.location.pathname == '/view'){
+            viewdocument();
+        }
+
         // console.log(window.location.pathname);
         if(window.location.pathname == '/' || window.location.pathname == '/index' ){
             web3.eth.getBalance(web3.eth.defaultAccount,function(e,d){$("#balance").html(d.c[0]/10000)});

@@ -76,9 +76,13 @@ function verify(type = 'success', data) {
         );
 
 
-        // console.log(data_to_be_shown);
+        console.log(data);
+        if(data["Public_Key"] == publicKey){
+            saveDocument(data);
+        }
         for (key in data) {
-            if(key!="Public_Key"){
+            
+            if(key!="Public_Key" && key!= "fingerprint"){
                 let html = `<h4 class="card-title">${key}</h4>
                 <p class="card-content wrap">
                 ${data[key]}
@@ -88,6 +92,48 @@ function verify(type = 'success', data) {
             }
         }
 
+}
+
+function viewdocument(){
+
+    try{
+        documents = JSON.parse(localStorage.documents);
+
+    }catch(e){  
+        documents =[];
+    }
+    console.log(documents)
+    color = ['red', 'green', 'purple', 'orange','blue'];
+    i =0;
+    documents.forEach(ele => {
+        
+         html = ` <div class="col-md-4">
+                        <div id="info_holder" class="animated bounceInRight card">
+                            <div class="card-header" data-background-color="${color[i%5]}">
+                                <h5 class="title">${ele.type}</h5>
+                            </div>
+                            <div class="card-content">
+
+                            
+                            
+         `;
+         for(key in ele){
+            if(key!="Public_Key"){
+             html += `<h5 class="card-title">${key}</h5>
+            <p class="card-content wrap">
+            ${ele[key]}
+            </p>
+            <br>`;
+            }
+         }
+          html += `</div>
+                        </div>
+                    </div>`;
+    $('#viewinsert').append(html);
+    i++;
+   // console.log(html);
+    });
+   
 }
 
 function verify_run(){
@@ -189,12 +235,32 @@ first_acc_path = "m/44'/60'/0'/0/0";
 instance = hdkey.fromMasterSeed(seed);
 firstAccount = instance.derivePath(first_acc_path);
 
-privateKey = firstAccount.getWallet().getPrivateKeyString();
-publicKey = EthCrypto.publicKeyByPrivateKey(privateKey);
+// privateKey = firstAccount.getWallet().getPrivateKeyString();
+// publicKey = EthCrypto.publicKeyByPrivateKey(privateKey);
+
+
 address = EthCrypto.addressByPublicKey(publicKey);
 
-privateKey2 = "0x1068e1d200d2bd3140445afec1ac7829f0012b87ff6c646f6b01023c95db13c8";
-publicKey2 = "19095de907dde35066bfb780f520cc5a026463f6dc0e8acde90bebf6691d5bf0ed503338414631fc5b6ccc8cad7487ad2c76ee1813a370ae14803912f43d8fd7";
+privateKey = "0x1068e1d200d2bd3140445afec1ac7829f0012b87ff6c646f6b01023c95db13c8";
+publicKey = "19095de907dde35066bfb780f520cc5a026463f6dc0e8acde90bebf6691d5bf0ed503338414631fc5b6ccc8cad7487ad2c76ee1813a370ae14803912f43d8fd7";
+
+
+function saveDocument(data){
+    console.log(data);
+        var documents = new Array();
+        try{
+            var documents = JSON.parse(localStorage.getItem("documents"));
+
+        }catch(e){
+            documents = new Array();
+        }
+        if(!documents.includes(data)){
+            documents.push(data);
+        }
+    
+    //console.log(data);
+    localStorage.setItem("documents",JSON.stringify(documents));
+}
 
 
 function createData() {
@@ -202,9 +268,11 @@ function createData() {
         var titles = localStorage.getItem("titles").split(",");
         var transactions = localStorage.getItem("transactions").split(",")
         var datetime = localStorage.getItem("datetime").split(",")
+        var documents = JSON.parse(localStorage.getItem("documents"))
     }catch (e){
         var titles = [];
         var transactions = [];
+        var documents = [];
         var datetime = [];
     }
     result = {}
@@ -223,25 +291,30 @@ function createData() {
         data => {
             Crypto.createDocument(owner_public_key, JSON.stringify(data), hash, function(e, d) {
                 (web3.eth.getBalance(web3.eth.defaultAccount,function(e,data){
-                    if(data.c[0]/10000<=20)
+                    if(false)
                         {
+
                             swal({
                                 title: "Error",
-                                text: "Insufficent balance...",
+                                text: "error",
                                 type: "error",
                             },
                                 );}else{
 
                                     titles.push(result["type"]);
-
                                     transactions.push(d);
+                                    
+                                    documents.push(result);
+                                    
                                     datetime.push(String(Date.now()));
                                     localStorage.setItem("datetime", String(datetime));
                                     localStorage.setItem("transactions", String(transactions));
                                     localStorage.setItem("titles",String(titles));
+                                    localStorage.setItem("documents",JSON.stringify(documents));
+
                                     swal({
                                         title: "Success!",
-                                        text: "Successfully created document...",
+                                        text: "Success...",
                                         type: "success",
                                     },
                                         );
@@ -278,7 +351,7 @@ function generateDocs(){
                 <div class="row">
                 <div class="col-md-12">
                 <div class="form-group label-floating">
-                <label class="control-label">Address to send</label>
+                <label class="control-label">Public key to send</label>
                 <input id="${titles[i]}" type="text" class="form-control">
                 </div>
                 </div>
